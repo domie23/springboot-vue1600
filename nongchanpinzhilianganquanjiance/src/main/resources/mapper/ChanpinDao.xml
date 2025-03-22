@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ChanpinDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.chanpin_uuid_number as chanpinUuidNumber
+        ,a.chanpin_name as chanpinName
+        ,a.chanpin_types as chanpinTypes
+        ,a.chanpin_photo as chanpinPhoto
+        ,a.chanpin_zhongzhi as chanpinZhongzhi
+        ,a.chanpin_jiagong as chanpinJiagong
+        ,a.chanpin_yunshu as chanpinYunshu
+        ,a.chanpin_xiaoshou as chanpinXiaoshou
+        ,a.chanpin_yuancailiao as chanpinYuancailiao
+        ,a.chanpin_zhongzi as chanpinZhongzi
+        ,a.chanpin_feiliao as chanpinFeiliao
+        ,a.chanpin_nongyao as chanpinNongyao
+        ,a.chanpin_number as chanpinNumber
+        ,a.chanpin_danwei as chanpinDanwei
+        ,a.chanpin_time as chanpinTime
+        ,a.chanpin_baozhi as chanpinBaozhi
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ChanpinView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM chanpin  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.chanpinUuidNumber != '' and params.chanpinUuidNumber != null and params.chanpinUuidNumber != 'null' ">
+                and a.chanpin_uuid_number like #{params.chanpinUuidNumber}
+            </if>
+            <if test=" params.chanpinName != '' and params.chanpinName != null and params.chanpinName != 'null' ">
+                and a.chanpin_name like CONCAT('%',#{params.chanpinName},'%')
+            </if>
+            <if test="params.chanpinTypes != null and params.chanpinTypes != ''">
+                and a.chanpin_types = #{params.chanpinTypes}
+            </if>
+            <if test=" params.chanpinZhongzhi != '' and params.chanpinZhongzhi != null and params.chanpinZhongzhi != 'null' ">
+                and a.chanpin_zhongzhi like CONCAT('%',#{params.chanpinZhongzhi},'%')
+            </if>
+            <if test=" params.chanpinJiagong != '' and params.chanpinJiagong != null and params.chanpinJiagong != 'null' ">
+                and a.chanpin_jiagong like CONCAT('%',#{params.chanpinJiagong},'%')
+            </if>
+            <if test=" params.chanpinYunshu != '' and params.chanpinYunshu != null and params.chanpinYunshu != 'null' ">
+                and a.chanpin_yunshu like CONCAT('%',#{params.chanpinYunshu},'%')
+            </if>
+            <if test=" params.chanpinXiaoshou != '' and params.chanpinXiaoshou != null and params.chanpinXiaoshou != 'null' ">
+                and a.chanpin_xiaoshou like CONCAT('%',#{params.chanpinXiaoshou},'%')
+            </if>
+            <if test=" params.chanpinYuancailiao != '' and params.chanpinYuancailiao != null and params.chanpinYuancailiao != 'null' ">
+                and a.chanpin_yuancailiao like CONCAT('%',#{params.chanpinYuancailiao},'%')
+            </if>
+            <if test=" params.chanpinZhongzi != '' and params.chanpinZhongzi != null and params.chanpinZhongzi != 'null' ">
+                and a.chanpin_zhongzi like CONCAT('%',#{params.chanpinZhongzi},'%')
+            </if>
+            <if test=" params.chanpinFeiliao != '' and params.chanpinFeiliao != null and params.chanpinFeiliao != 'null' ">
+                and a.chanpin_feiliao like CONCAT('%',#{params.chanpinFeiliao},'%')
+            </if>
+            <if test=" params.chanpinNongyao != '' and params.chanpinNongyao != null and params.chanpinNongyao != 'null' ">
+                and a.chanpin_nongyao like CONCAT('%',#{params.chanpinNongyao},'%')
+            </if>
+            <if test="params.chanpinNumberStart != null and params.chanpinNumberStart != ''">
+                <![CDATA[  and a.chanpin_number >= #{params.chanpinNumberStart}   ]]>
+            </if>
+            <if test="params.chanpinNumberEnd != null and params.chanpinNumberEnd != ''">
+                <![CDATA[  and a.chanpin_number <= #{params.chanpinNumberEnd}   ]]>
+            </if>
+             <if test="params.chanpinNumber != null and params.chanpinNumber != ''">
+                and a.chanpin_number = #{params.chanpinNumber}
+             </if>
+            <if test=" params.chanpinDanwei != '' and params.chanpinDanwei != null and params.chanpinDanwei != 'null' ">
+                and a.chanpin_danwei like CONCAT('%',#{params.chanpinDanwei},'%')
+            </if>
+            <if test=" params.chanpinTimeStart != '' and params.chanpinTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.chanpin_time) >= UNIX_TIMESTAMP(#{params.chanpinTimeStart}) ]]>
+            </if>
+            <if test=" params.chanpinTimeEnd != '' and params.chanpinTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.chanpin_time) <= UNIX_TIMESTAMP(#{params.chanpinTimeEnd}) ]]>
+            </if>
+            <if test="params.chanpinBaozhiStart != null and params.chanpinBaozhiStart != ''">
+                <![CDATA[  and a.chanpin_baozhi >= #{params.chanpinBaozhiStart}   ]]>
+            </if>
+            <if test="params.chanpinBaozhiEnd != null and params.chanpinBaozhiEnd != ''">
+                <![CDATA[  and a.chanpin_baozhi <= #{params.chanpinBaozhiEnd}   ]]>
+            </if>
+             <if test="params.chanpinBaozhi != null and params.chanpinBaozhi != ''">
+                and a.chanpin_baozhi = #{params.chanpinBaozhi}
+             </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
